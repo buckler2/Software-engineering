@@ -47,19 +47,25 @@ public class BST<Key extends Comparable<Key>, Value> {
    
 	public Node lca(Node r,Node x, Node y)
 	{
-		Node root;
-	    private List<Integer> path1 = new ArrayList<>();
-	    private List<Integer> path2 = new ArrayList<>();
+		if(root==null || x==null || y == null)
+	        return null;
 	 
-	    int findLCA(int n1, int n2) {
-	        path1.clear();
-	        path2.clear();
-	        return findLCAInternal(root, n1, n2);
-	    }
+	    if(root==x || root==y)
+	        return root;
+	    
 	 
-	    private int findLCAInternal(Node root, int n1, int n2) {
+	    Node l = lca(root.left, x, y);
+	    Node p = lca(root.right, x, y);
 	 
-	 
+	    if(l!=null&&r!=null)
+	    {
+	        return root;
+	    }else if(l==null&&r==null)
+	    {
+	        return null;
+	    }else
+	    {
+	        return l==null?r:l;
 	    }
 	}
 }
