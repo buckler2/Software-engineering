@@ -1,4 +1,6 @@
 import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BST<Key extends Comparable<Key>, Value> {
 	
@@ -9,72 +11,55 @@ public class BST<Key extends Comparable<Key>, Value> {
      * Private node class.
      */
     private class Node {
-        private Key key;           // sorted by key
-        private Value val;         // associated data
-        private Node left, right;  // left and right subtrees
-
-        public Node(Key key, Value val) {
+    	int key;
+        Node left, right, parent;
+     
+        Node(int key) 
+        {
             this.key = key;
-            this.val = val;
+            left = right = parent = null;
         }
     }
     
-	public boolean isEmpty()
-	{
-		if(this.root == null)
-		{
-			return true;
-		}
-		return false;
-	}
-	
 
-	
-	public void put(Key key, Value val) {
-        if (val == null) { return; } //something missing here
-        root = put(root, key, val);
+    Node insert(Node node, int key) 
+    {
+        /* If the tree is empty, return a new node */
+        if (node == null)
+            return new Node(key);
+ 
+        /* Otherwise, recur down the tree */
+        if (key < node.key) 
+        {
+            node.left = insert(node.left, key);
+            node.left.parent = node;
+        }
+        else if (key > node.key) 
+        {
+            node.right = insert(node.right, key);
+            node.right.parent = node;
+        }
+ 
+        /* return the (unchanged) node pointer */
+        return node;
     }
-
-    private Node put(Node x, Key key, Value val) {
-        if (x == null) return new Node(key, val);
-        int cmp = key.compareTo(x.key);
-        if      (cmp < 0) x.left  = put(x.left,  key, val);
-        else if (cmp > 0) x.right = put(x.right, key, val);
-        else              x.val   = val;
-        return x;
-    }
+ 
    
 	public Node lca(Node r,Node x, Node y)
 	{
-		//first assign lca to root as if all options fail this is the Lca
-		Node lowestCommonAncestor = root;
-		r = root;
-		
-		 if(isEmpty())
-		 {
-			 return null; 
-		 }
-		 if(root== x || root==y)
-		 {
-			 return root;
-		 }
-		 
-		 Node p = lca(root.left, x, y);
-		 Node w = lca(root.right, x, y);
-		 
-		    if(p!=null && w!=null){
-		        return root;
-		    }
-		    else if
-		    (p==null && w==null)
-		    {
-		    	lowestCommonAncestor = null;
-		    }
-		    else
-		    {
-		    	lowestCommonAncestor = p==null?w:p;
-		    } 
-		    return lowestCommonAncestor;
+		Node root;
+	    private List<Integer> path1 = new ArrayList<>();
+	    private List<Integer> path2 = new ArrayList<>();
+	 
+	    int findLCA(int n1, int n2) {
+	        path1.clear();
+	        path2.clear();
+	        return findLCAInternal(root, n1, n2);
+	    }
+	 
+	    private int findLCAInternal(Node root, int n1, int n2) {
+	 
+	 
+	    }
 	}
-	
 }
