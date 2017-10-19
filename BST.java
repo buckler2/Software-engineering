@@ -1,10 +1,9 @@
-import java.util.NoSuchElementException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BST <Key extends Comparable<Key>> {
-	
-	private Key [] keysInOrder;
+
     private Node root;             // root of BST
 
     /**
@@ -55,35 +54,34 @@ public class BST <Key extends Comparable<Key>> {
         return node;
     }
  
-   
-	public Node lca(Node r,Node x, Node y)
-	{
-		//ensures that both nodes are in the search tree
-		if(!this.contains(x.key) || !this.contains(y.key))
+	public int lowestCommonAncestor(Key x, Key y){
+		
+		//if one key is not in binary tree, -1 is returned
+		if(!contains(x) || !(contains(y)))
 		{
-			return null;
+			return -1;
 		}
-		if(root==null || x==null || y == null)
-	        return null;
-	 
-	    if(root==x || root==y)
-	        return root;
-	    
-	 
-	    Node l = lca(root.left, x, y);
-	    Node p = lca(root.right, x, y);
-	 
-	    if(l!=null&&p!=null)
-	    {
-	        return root;
-	    }
-	    else if(l==null&&p==null)
-	    {
-	        return null;
-	    }
-	    else
-	    {
-	        return l==null?p:l;
-	    }
+		//create 2 lists which will be compared against eachother to find common ancestor
+		ArrayList<Integer> line1 = new ArrayList<>();
+		ArrayList<Integer> line2 = new ArrayList<>();
+		
+		//Add path of nodes to each key to allow for comparison of common ancestor
+		line1 = findPath(x);
+		line2 = findPath(y);
+		
+		for(int count = 0; count < line1.size() && count < line2.size(); count++){
+			
+			if(line1.get(count).equals(line2.get(count))){
+				return line1.get(count);
+			}
+		}
+		//Return -1 if no ancestor
+		return -1;
 	}
+	
+	public List<Integer> printPath(Key x){
+	    ArrayList<Integer> path = new ArrayList<>();
+	    return path; 
+	}
+
 }

@@ -44,6 +44,7 @@ public class BSTtest {
 		
 	}
 	
+	@Test
 	public void testLowestCommonAncestor(){
 		BST<Integer> bst = new BST<Integer>();
 		bst.insert(7);   //        _7_
@@ -55,8 +56,11 @@ public class BSTtest {
 		bst.insert(4);   //   2   4
 		bst.insert(5);   //  
 		
-		//findLCA();
-	//	findLCA()
+		assertEquals("Checking the get value of the tree", 3, bst.lowestCommonAncestor(2, 4));
+		assertEquals("Checking the get value of the tree", 7, bst.lowestCommonAncestor(3, 8));
+
+
+		
 		
 	}
 	
