@@ -77,7 +77,6 @@ public class BST {
             if (!path1.get(i).equals(path2.get(i)))
                 break;
         }
- 
         return path1.get(i-1);
     }
  

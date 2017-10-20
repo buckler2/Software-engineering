@@ -33,14 +33,20 @@ public class BSTtest {
 		bst.insert(2);   // 1       6
 		bst.insert(6);   //  \     /
 		bst.insert(4);   //   2   4
-		bst.insert(5);   //        \
-		
-		assertEquals("Checking the get value of the tree", true, bst.contains(1));
+		bst.insert(5);
+		//        \
+		//test1
+		assertEquals("Checking if contains returns true for a node when it is in the tree", true, bst.contains(1));
+		//test2
+		assertEquals("Checking if contains returns false when the root is not in tree", false, bst.contains(11));
 		BST bst1 = new BST();
 		bst1.insert(7);
-		assertEquals("Checking the get for only one root node", true, bst1.contains(7));
+		//test 3
+		assertEquals("Checking contains for only one root node", true, bst1.contains(7));
 		BST bst2 = new BST();
-		assertEquals("Checking the get for empty", false, bst2.contains(0));
+		//test 4
+		assertEquals("Checking contains for empty tree", false, bst2.contains(0));
+		
 		
 	}
 	
@@ -59,11 +65,12 @@ public class BSTtest {
 		//test1
 		assertEquals("Checking if LCA finds correct parent", 3, bst.findLowestCommonAncestor(2, 4));
 		//test2
-		assertEquals("Checking if LCA finds correct parent", 7, bst.findLowestCommonAncestor(4,8));
+		assertEquals("Checking if LCA finds correct parent when root is ancestor", 7, bst.findLowestCommonAncestor(4,8));
 		//test3
 		assertEquals("Checking if LCA returns -1 when node entered is not in tree", -1, bst.findLowestCommonAncestor(11,8));
-		
-		
+		//test4 
+		assertEquals("checking that the root is returned when finding ancestor between root and "
+				+ "other node", 7, bst.findLowestCommonAncestor(7,8));
 	}
 	
 
