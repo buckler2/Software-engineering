@@ -10,8 +10,8 @@ public class LCADag {
 	private boolean visited[]; 			//Boolean array which checks if a node has been visited yet
 	private boolean acyclic = true; 	//If graph has cycle, this is changed to false
 	private ArrayList<Integer> firstPath = new ArrayList<Integer>();
-	private ArrayList<Integer> secondPath = new ArrayList<Integer>(); //used to find path from root to node in question
-	ArrayList<Integer> commonAncestors = new ArrayList<Integer>(); //Common ancestors between two nodes
+	private ArrayList<Integer> secondPath = new ArrayList<Integer>();	 //used to find path from root to node in question
+	ArrayList<Integer> commonAncestors = new ArrayList<Integer>();		 //Common ancestors between two nodes
 
 	//taken from code online https://algs4.cs.princeton.edu/42digraph/Digraph.java.html
 	public LCADag(int V) {
@@ -44,9 +44,12 @@ public class LCADag {
 	}
 
 	// throw an IllegalArgumentException unless {@code 0 <= v < V}
-	private void validateVertex(int v) {
-		if (v < 0 || v >= V)
-			throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+	private boolean validateVertex(int v) {
+		if (v < 0 || v >= V){
+			return false;
+		}
+		else
+			return true;
 	}
 
 	/**
@@ -57,8 +60,10 @@ public class LCADag {
 	 * @throws IllegalArgumentException unless both {@code 0 <= v < V} and {@code 0 <= w < V}
 	 */
 	public void addEdge(int v, int w) {
-		validateVertex(v);
-		validateVertex(w);
+		if(!validateVertex(v) || !validateVertex(v)){
+			System.out.print("invalid input");
+			return;
+		}
 		adj[v].add(w);
 		indegree[w]++;
 		E++;
@@ -72,19 +77,32 @@ public class LCADag {
 	 * @throws IllegalArgumentException unless {@code 0 <= v < V}
 	 */
 	public Iterable<Integer> adj(int v) {
-		validateVertex(v);
-		return adj[v];
+		if(validateVertex(v)){
+			return adj[v];
+		}
+		else 
+			return null;
+		
 	}
 
 	//returns the number of directed going out of the vertex {@code v}.
 	public int outdegree(int v) {
-		validateVertex(v);
-		return adj[v].size();
+		if(validateVertex(v) ==false)
+		{
+			return -1;
+		}
+		if(validateVertex(v) ==true);
+		{
+			return adj[v].size();
+		}
 	}
 
 	//returns the number of directed edges going into the vertex {@code v}.
 	public int indegree(int v) {
-		validateVertex(v);
+		if(validateVertex(v) ==false)
+		{
+			return -1;
+		}
 		return indegree[v];
 	}
 	/**
@@ -106,7 +124,6 @@ public class LCADag {
 		if(visited[v] == true)
 		{
 			acyclic = false;
-			return;
 		}
 		// Mark the current node as visited and print it
 		visited[v] = true;
@@ -129,8 +146,11 @@ public class LCADag {
 		{
 			return -1;
 		}
-		validateVertex(p);
-		validateVertex(r);
+		if( validateVertex(p) || validateVertex(p))
+		{
+			System.out.print("Invalid input");
+			return -1;
+		}
 		if(E==0)
 		{	
 			//Graph is empty
@@ -139,6 +159,7 @@ public class LCADag {
 		firstPath.clear();
 		secondPath.clear();
 		commonAncestors.clear();
+		
 		LCADag backwards = reverse();
 		firstPath= backwards.DFS(p);
 		secondPath = backwards.DFS(r);

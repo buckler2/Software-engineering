@@ -73,7 +73,17 @@ public class LCADagTest {
 	
 	@Test
 	public void testAddEdge(){
+		LCADag test = new LCADag(20);
 		
+		test.addEdge(0, 4);
+		test.addEdge(1, 2);
+		
+		//These functions should not add any edges as they do not fit constraints of directed graph
+		// i.e 25> V & -1<V
+		test.addEdge(3, 25);
+		test.addEdge(-1, 4);
+		
+		assertEquals("E function should return 2",2,test.E());
 	}
 	
 	
