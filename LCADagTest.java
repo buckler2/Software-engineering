@@ -10,11 +10,20 @@ public class LCADagTest {
 	}
 	
 	@Test
-	public void testPath()
+	public void graphIsAcyclic()
 	{
 		
 	}
 	@Test
+	public void testCycle()
+	{
+		
+	}
 	
-
+	@Test
+	public void testAddEdge()
+	{
+		
+	}
+	
 }
