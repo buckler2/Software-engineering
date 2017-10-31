@@ -1,26 +1,36 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+
+
 
 public class LCADag {
-	//edge is an ordered pair of nodes
-    public class Node {
-    	int data;
-        private List<Node> parents = new ArrayList<>();
-        private List<Node> successors = new ArrayList<>();
-     
-        Node(int value) 
-        {
-            data = value;
-        }
-    }
-    
-     private class PathMap {
-    	  HashMap<LCADag.Node, List<LCADag.Node> > pathMap;
-    	  public List<LCADag.Node> getPathFromRoot(LCADag.Node n) {
-    	     List<LCADag.Node> pathFromRoot = pathMap.get(n);
-    	     return pathFromRoot;
-    	  }
-    	}
+	
+	private int vertices;           // number of vertices in this digraph
+	private int edges;                 // number of edges in this digraph
+	private ArrayList<Integer>[] adj;    // adj[v] = adjacency list for vertex v
+	private int[] indegree;        // indegree[v] = indegree of vertex v
+	
+	private boolean marked[];		//Boolean List to track visited vertices
+	private boolean cycleExists;		//True if cycle in graph
+    private boolean stack[];		//Order that vertices were visited
+
+	
+	public LCADag(int V)
+	{
+		if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
+	    this.vertices = V;
+	    this.edges = 0;
+	    indegree = new int[V];
+	    marked = new boolean[V];
+	    stack = new boolean[V];
+	    adj = (ArrayList<Integer>[]) new ArrayList[V];
+	    for (int v = 0; v < V; v++) {
+	        adj[v] = new ArrayList<Integer>();
+	    }              
+	}
+
+
 
 }
