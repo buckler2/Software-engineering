@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class LCADag {
@@ -44,7 +45,7 @@ public class LCADag {
 	}
 
 	// throw an IllegalArgumentException unless {@code 0 <= v < V}
-	private boolean validateVertex(int v) {
+	public boolean validateVertex(int v) {
 		if (v < 0 || v >= V){
 			return false;
 		}
@@ -60,7 +61,7 @@ public class LCADag {
 	 * @throws IllegalArgumentException unless both {@code 0 <= v < V} and {@code 0 <= w < V}
 	 */
 	public void addEdge(int v, int w) {
-		if(!validateVertex(v) || !validateVertex(v)){
+		if(!validateVertex(v) || !validateVertex(w)){
 			System.out.print("invalid input");
 			return;
 		}
@@ -82,7 +83,6 @@ public class LCADag {
 		}
 		else 
 			return null;
-		
 	}
 
 	//returns the number of directed going out of the vertex {@code v}.
@@ -114,6 +114,8 @@ public class LCADag {
 
 	public ArrayList<Integer> DFS(int v)
 	{
+		visited = new boolean[this.V -1];
+		Arrays.fill(visited, Boolean.FALSE);
 		ArrayList<Integer> path = new ArrayList<Integer>();
 		DFSutil(v,path);
 		return path;
@@ -121,6 +123,7 @@ public class LCADag {
 	
 	private void DFSutil(int v, ArrayList<Integer> a)
 	{
+		a.add(v);
 		if(visited[v] == true)
 		{
 			acyclic = false;
@@ -128,7 +131,6 @@ public class LCADag {
 		// Mark the current node as visited and print it
 		visited[v] = true;
 		// Recur for all the vertices adjacent to this vertex
-
 		Iterator<Integer> i = adj[v].listIterator();
 		while (i.hasNext())
 		{
@@ -144,11 +146,12 @@ public class LCADag {
 		DFS(0);
 		if(acyclic == false)
 		{
+			System.out.print("Graph has cycle");
 			return -1;
 		}
-		if( validateVertex(p) || validateVertex(p))
+		if( !validateVertex(p) || !validateVertex(p))
 		{
-			System.out.print("Invalid input");
+			System.out.print("Invalid input\n");
 			return -1;
 		}
 		if(E==0)
@@ -163,23 +166,23 @@ public class LCADag {
 		LCADag backwards = reverse();
 		firstPath= backwards.DFS(p);
 		secondPath = backwards.DFS(r);
-		boolean found = false;
-		for(int i = 0; i<firstPath.size(); i++){
-			for(int t = 0; t<secondPath.size(); t++){		
-				if(firstPath.get(i)==secondPath.get(t)){
-					commonAncestors.add(firstPath.get(i));	
-					found = true;
+		boolean lca = false;
+		
+		//get list of all the common ancestors between the two vertices
+		for(int index = 0; index<firstPath.size(); index++){
+			for(int i2 = 0; i2<secondPath.size(); i2++){		
+				if(firstPath.get(index)==secondPath.get(i2)){
+					commonAncestors.add(firstPath.get(index));	
+					lca = true;
 				}
 			}
 		}
-
-		if(found)
+		if(lca)
 			//Returns first Ancestor in list(LCA)
 			return commonAncestors.get(0);
 		else
 			//No Ancestors found
 			return -1;
-
 	}
 	//Reverses the Directed Acyclic Graph
 	public LCADag reverse() {
@@ -191,6 +194,4 @@ public class LCADag {
 		}
 		return reverse;
 	}
-
-
 }
