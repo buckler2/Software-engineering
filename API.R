@@ -1,12 +1,14 @@
-library(httr);
+library(jsonlite)
+library(httpuv)
+library(httr)
 
-'Access token = 15050eb5dcf2a17e95252d709911e4f7a347929d'
-'https://developer.github.com/v4/guides/intro-to-graphql/'
+oauth_endpoints("github")
+myapp <- oauth_app(appname = "Software Engineering", key = "f7e905beb15f09442c4a",
+                     secret = "03bef356950401e16edfd6f979f7c74e7087fb73")
 
-query <- "https://api.github.com/orgs/github";
-query2 <- "https://api.github.com/users/octocat";
-query3 <- "https://api.github.com/teams/1";
+gh_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+token <- config(token = gh_token)
 
-curl = "15050eb5dcf2a17e95252d709911e4f7a347929d https://api.github.com/graphql";
-out = GET(url = curl);
+getrepo <- GET("https://api.github.com/users/buckler2/repos", token)
+
 
