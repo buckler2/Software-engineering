@@ -11,16 +11,6 @@ token <- config(token = gh_token)
 
 getrepo <- GET("https://api.github.com/users/buckler2/repos", token)
 
-
-
-# Take action on http error
-stop_for_status(req)
-
-# Extract content from a request
-json1 = content(req)
-
-# Convert to a data.frame
+stop_for_status(request)
+json1 = content(request)
 gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
-
-# Subset data.frame
-gitDF[gitDF$full_name == "sorchaobyrne/datasharing", "created_at"]
