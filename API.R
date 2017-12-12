@@ -25,10 +25,18 @@ json1 <- content(request)
 gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
 
 # Subset data.frame
-gitDF[gitDF$full_name == "jtleek/datasharing", "created_at"] 
+gitDF[gitDF$full_name == "buckler2/datasharing", "created_at"] 
 
-#Interrogate Github to obtain phadej FOLLOWERS
-phadFollowers = fromJSON("https://api.github.com/users/phadej/followers")
+#get info on phadej followers
+nameState = c('phadej')
+getProfile = content(GET("https://api.github.com/users/phadej", token))
+followers_JSON = content(GET("https://api.github.com/users/phadej/followers", token))
+phadejFollowers = jsonlite::fromJSON(jsonlite::toJSON(followers_JSON))
+userNames = phadejFollowers$login
+userNames
 
-#Find usernames
-followers = phadFollowers$login
+#get phadej follower's profile
+
+
+
+
