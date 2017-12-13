@@ -34,11 +34,6 @@ usernames = c(usernames , phadejFollowers$login)
 #a dataframe containing user and all of their followers
 phadej = c("phadej,")
 #get phadej follower's profile
-for(i in 1:length(usernames))
-{
-  #make connection
-  userConnection = c(userConnection, paste0(phadej,usernames[i]))
-}
 
 #Get phadej's followers followers
 for(i in 1: length(usernames))
@@ -57,7 +52,7 @@ usernames = unique(usernames)
 'due to the length of time it takes to run this for loop I am going to reduce the amount of users
 in order to get weekly commits. This will  still work for larger samples of data'
 
-usernamesforWeeklyCommits = usernames[1:5]
+usernamesforWeeklyCommits = usernames[1:10]
 #test
 #create data frame to store users and their repos
 userIdAndRepo = c()
@@ -69,27 +64,24 @@ for(i in 1:length(usernamesforWeeklyCommits))
   names = c(allrepos_R$full_name)
   userIdAndRepo = c(userIdAndRepo , names)
 }
-
 #remove duplicates
 userIdAndRepo = unique(userIdAndRepo)
-#create matrix that u=has 52 columns and has as many rows as there are repositories
 x = length(userIdAndRepo)*52
 x
-k =0
-data =  array(0,dim = x)
-for(i in 1: x)
+data =c()
+i=0
+#add number of commits per week to vector
+#also find how much of the commits each week are from the owner of the repository
+for(i in 1: length(userIdAndRepo))
 {
   getWeeklyCommit =  content(GET(paste0("https://api.github.com/repos/",userIdAndRepo[i],"/stats/participation"), token))
-  weeklyCommits = getWeeklyCommit$all
-  for(j in 1: 52)
-  {
-    data[k] = weeklyCommits[i]
-    k=k +1
-  }
+  weeklyCommits = c(getWeeklyCommit$all)
+  data = c(data, weeklyCommits)
 }
-data = c()
-while(i < )
-weeklyCommits[4]
+#create matrix
+matrixData = matrix(data, nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
+matrixData
+#write data to excel
+write.csv((matrixData), file = "commits.csv",row.names = FALSE )
 
 
-#plotting graphs
