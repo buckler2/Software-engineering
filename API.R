@@ -68,7 +68,8 @@ for(i in 1:length(usernamesforWeeklyCommits))
 userIdAndRepo = unique(userIdAndRepo)
 x = length(userIdAndRepo)*52
 x
-data =c()
+alluserdata =c()
+ownerdata = c()
 i=0
 #add number of commits per week to vector
 #also find how much of the commits each week are from the owner of the repository
@@ -76,12 +77,15 @@ for(i in 1: length(userIdAndRepo))
 {
   getWeeklyCommit =  content(GET(paste0("https://api.github.com/repos/",userIdAndRepo[i],"/stats/participation"), token))
   weeklyCommits = c(getWeeklyCommit$all)
-  data = c(data, weeklyCommits)
+  ownerWeeklyCommits = c(getWeeklyCommit$owner)
+  ownerdata = c(ownerdata,ownerWeeklyCommits )
+  alluserdata = c(data, weeklyCommits)
 }
 #create matrix
 matrixData = matrix(data, nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
-matrixData
+ownerMatrix = matrix(ownerdata,nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
 #write data to excel
-write.csv((matrixData), file = "commits.csv",row.names = FALSE )
+write.csv((matrixData), file = "allusercommits.csv",row.names = FALSE )
+write.csv(ownerMatrix, file = "ownerWeeklyCommits.csv",row.names = FALSE )
 
 
