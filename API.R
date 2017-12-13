@@ -2,6 +2,7 @@ library(jsonlite)
 library(httpuv)
 library(httr)
 library(reshape)
+
 'initial set up taken from
 https://towardsdatascience.com/accessing-data-from-github-api-using-r-3633fb62cb08'
 
@@ -10,7 +11,7 @@ app <- oauth_app(appname = "Software Engineering", key = "97c3d9beb438eadd730e",
                      secret = "201bb4ee8eb0618f9797d30acef5355553243e67")
 
 gh_token <- oauth2.0_token(oauth_endpoints("github"),app)
-token <- config(token = gh_token)
+token = config(token = gh_token)
 
 request <- GET("https://api.github.com/users/phadej", token)
 
@@ -20,19 +21,17 @@ stop_for_status(request)
 #extraxt content from a request
 json1 <- content(request)
 
-
 #convert to a data frame
 gitDF = jsonlite::fromJSON(jsonlite::toJSON(json1))
 
+
 #get initial info on phadej followers
-getProfile = content(GET("https://api.github.com/users/phadej", token))
+phadej = content(GET("https://api.github.com/users/phadej", token))
 followers_JS = content(GET("https://api.github.com/users/phadej/followers", token))
 phadejFollowers = jsonlite::fromJSON(jsonlite::toJSON(followers_JS))
-usernames = phadejFollowers$login
-usertype = phadejFollowers$repos_url
-
+usernames = c("phadej")
+usernames = c(usernames , phadejFollowers$login)
 #a dataframe containing user and all of their followers
-userConnection = c()
 phadej = c("phadej,")
 #get phadej follower's profile
 for(i in 1:length(usernames))
@@ -50,19 +49,47 @@ for(i in 1: length(usernames))
   theirUserNames = c(userfollowersProfile_R$login)
   #get follower names
   theirUserProfileNames =  c(userfollowersProfile_R$login)
-  for(j in 1: length(theirUserProfileNames))
-  {
-    #make connection
-    userConnection = c(userConnection, paste0(phadej,usernames[i],",", theirUserProfileNames[j]))
-  }
+  usernames = c(usernames,theirUserProfileNames)
 }
 #remove duplicates
+usernames = unique(usernames)
 
-#alter data so it fits into csv
-userConnection = userConnection[31:685]
+'due to the length of time it takes to run this for loop I am going to reduce the amount of users
+in order to get weekly commits. This will  still work for larger samples of data'
 
-userConnection[1]
-df <- data.frame(userConnection)
-df = transform(df, userConnection = colsplit(userConnection, split = ",", names = c('root','ancestor1', 'ancestor2')))
-userConnection = c(df)
-write.csv(userConnection, file = "connection.csv", row.names = FALSE )
+usernamesforWeeklyCommits = usernames[1:5]
+#test
+#create data frame to store users and their repos
+userIdAndRepo = c()
+#get username and repo name and fill into vector
+for(i in 1:length(usernamesforWeeklyCommits))
+{
+  repo =  content(GET(paste0("https://api.github.com/users/", usernamesforWeeklyCommits[i], "/repos"), token))
+  allrepos_R = jsonlite::fromJSON(jsonlite::toJSON(repo))
+  names = c(allrepos_R$full_name)
+  userIdAndRepo = c(userIdAndRepo , names)
+}
+
+#remove duplicates
+userIdAndRepo = unique(userIdAndRepo)
+#create matrix that u=has 52 columns and has as many rows as there are repositories
+x = length(userIdAndRepo)*52
+x
+k =0
+data =  array(0,dim = x)
+for(i in 1: x)
+{
+  getWeeklyCommit =  content(GET(paste0("https://api.github.com/repos/",userIdAndRepo[i],"/stats/participation"), token))
+  weeklyCommits = getWeeklyCommit$all
+  for(j in 1: 52)
+  {
+    data[k] = weeklyCommits[i]
+    k=k +1
+  }
+}
+data = c()
+while(i < )
+weeklyCommits[4]
+
+
+#plotting graphs
