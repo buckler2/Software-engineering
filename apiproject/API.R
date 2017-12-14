@@ -128,5 +128,5 @@ p <- add_trace(p, x=trace1$x, y=trace1$y, name=trace1$name, type=trace1$type, ui
 p <- layout(p, autosize=layout$autosize, hovermode=layout$hovermode, title=layout$title, xaxis=layout$xaxis, yaxis=layout$yaxis)
 
 'My data to create both time series was too big too include in this code, I used plotly to create the time series graphs
-but the code for r wass too large'
+but the code for r wass too large, see images in github repository'
 
