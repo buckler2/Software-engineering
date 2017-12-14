@@ -3,7 +3,7 @@ library(httpuv)
 library(httr)
 library(reshape)
 
-'initial set up taken from
+'initial set up taken froms
 https://towardsdatascience.com/accessing-data-from-github-api-using-r-3633fb62cb08'
 
 oauth_endpoints("github")
