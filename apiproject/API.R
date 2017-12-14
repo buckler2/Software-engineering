@@ -1,9 +1,9 @@
 library(jsonlite)
 library(httpuv)
 library(httr)
-library(reshape)
 
-'initial set up taken froms
+
+'initial set up taken from
 https://towardsdatascience.com/accessing-data-from-github-api-using-r-3633fb62cb08'
 
 oauth_endpoints("github")
@@ -52,8 +52,8 @@ usernames = unique(usernames)
 'due to the length of time it takes to run this for loop I am going to reduce the amount of users
 in order to get weekly commits. This will  still work for larger samples of data'
 
-usernamesforWeeklyCommits = usernames[1:10]
-#test
+usernamesforWeeklyCommits = usernames[1:60]
+
 #create data frame to store users and their repos
 userIdAndRepo = c()
 #get username and repo name and fill into vector
@@ -79,13 +79,15 @@ for(i in 1: length(userIdAndRepo))
   weeklyCommits = c(getWeeklyCommit$all)
   ownerWeeklyCommits = c(getWeeklyCommit$owner)
   ownerdata = c(ownerdata,ownerWeeklyCommits )
-  alluserdata = c(data, weeklyCommits)
+  alluserdata = c(alluserdata, weeklyCommits)
 }
+ownerdata
 #create matrix
-matrixData = matrix(data, nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
+matrixData = matrix(alluserdata, nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
 ownerMatrix = matrix(ownerdata,nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
 #write data to excel
-write.csv((matrixData), file = "allusercommits.csv",row.names = FALSE )
+write.csv(matrixData, file = "allusercommits.csv",row.names = FALSE )
 write.csv(ownerMatrix, file = "ownerWeeklyCommits.csv",row.names = FALSE )
-
+'I am going to use the excels files with plotly oline as you need plotly premium
+to use directly in r'
 
