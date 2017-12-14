@@ -71,8 +71,10 @@ x
 alluserdata =c()
 ownerdata = c()
 i=0
+languages =c()
 #add number of commits per week to vector
 #also find how much of the commits each week are from the owner of the repository
+#find which code is used most by byte size
 for(i in 1: length(userIdAndRepo))
 {
   getWeeklyCommit =  content(GET(paste0("https://api.github.com/repos/",userIdAndRepo[i],"/stats/participation"), token))
@@ -80,14 +82,51 @@ for(i in 1: length(userIdAndRepo))
   ownerWeeklyCommits = c(getWeeklyCommit$owner)
   ownerdata = c(ownerdata,ownerWeeklyCommits )
   alluserdata = c(alluserdata, weeklyCommits)
+  getLanguages = content(GET(paste0("https://api.github.com/repos/",userIdAndRepo[i],"/languages"),token))
+  languages = c(languages,getLanguages)
 }
-ownerdata
 #create matrix
 matrixData = matrix(alluserdata, nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
 ownerMatrix = matrix(ownerdata,nrow = 52, ncol = length(userIdAndRepo),byrow =TRUE)
 #write data to excel
 write.csv(matrixData, file = "allusercommits.csv",row.names = FALSE )
 write.csv(ownerMatrix, file = "ownerWeeklyCommits.csv",row.names = FALSE )
+write.csv(languages, file = "languages.csv",row.names=FALSE)
 'I am going to use the excels files with plotly oline as you need plotly premium
 to use directly in r'
+
+library(plotly)
+trace1 <- list(
+  x = c("C", "PHP", "Go", "TypeScript", "Java", "Python", "HTML", "R", "Ruby", "Haskell", "Scala", "Bison", "Assemby", "Shell", "CSS"), 
+  y = c("916562463", "237634933", "74265009", "65824304", "55905060", "50964391", "50057090", "35306117", "34844659", "31654610", "27998995", "21676388", "10760835", "12807125", "8994593"), 
+  name = "Bites", 
+  type = "bar", 
+  uid = "488e1d", 
+  xsrc = "buckler2:10:73fa41", 
+  ysrc = "buckler2:10:25e2e5"
+)
+data <- list(trace1)
+layout <- list(
+  autosize = TRUE, 
+  hovermode = "closest", 
+  title = "Most used languages by bites in repositories", 
+  xaxis = list(
+    autorange = TRUE, 
+    range = c(-0.5, 14.5), 
+    title = "Most Used Languages", 
+    type = "category"
+  ), 
+  yaxis = list(
+    autorange = TRUE, 
+    range = c(0, 964802592.632), 
+    title = "Bites", 
+    type = "linear"
+  )
+)
+p <- plot_ly()
+p <- add_trace(p, x=trace1$x, y=trace1$y, name=trace1$name, type=trace1$type, uid=trace1$uid, xsrc=trace1$xsrc, ysrc=trace1$ysrc)
+p <- layout(p, autosize=layout$autosize, hovermode=layout$hovermode, title=layout$title, xaxis=layout$xaxis, yaxis=layout$yaxis)
+
+'My data to create both time series was too big too include in this code, I used plotly to create the time series graphs
+but the code for r wass too large'
 
